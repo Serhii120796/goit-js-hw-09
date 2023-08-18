@@ -3,10 +3,13 @@ import 'flatpickr/dist/flatpickr.min.css';
 
 const input = document.querySelector('#datetime-picker');
 const startButton = document.querySelector('[data-start]');
-
-startButton.addEventListener('click', startTimer);
+const timerDays = document.querySelector('[data-days]');
+const timerHours = document.querySelector('[data-hours]');
+const timerMinutes = document.querySelector('[data-minutes]');
+const timerSeconds = document.querySelector('[data-seconds]');
 
 startButton.setAttribute('disabled', '');
+startButton.addEventListener('click', startTimer);
 
 flatpickr(input, {
   enableTime: true,
@@ -14,22 +17,42 @@ flatpickr(input, {
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    console.log(selectedDates[0]);
-      checkDate(selectedDates[0]);
-      return selectedDates[0];
+    checkDate(selectedDates[0]);
   },
 });
 
-function checkDate(selectedDates) {
-  selectedDates < new Date()
-    ? alert('Please choose a date in the future')
-    : startButton.removeAttribute('disabled');
+let selectedDate;
+
+function checkDate(date) {
+  if (date < new Date()) {
+    alert('Please choose a date in the future');
+    return;
+  }
+  selectedDate = date;
+  startButton.removeAttribute('disabled');
 }
 
-function startTimer() {
-    // startButton.setAttribute('disabled', '');
-    // const { days, hours, minutes, seconds } = convertMs(selectedDates - new Date());
-    // console.log(days);
+function startTimer(evt) {
+  evt.target.setAttribute('disabled', '');
+
+  formatTime();
+  const timerId = setInterval(() => {
+    if (new Date() > selectedDate) {
+      clearInterval(timerId);
+      return;
+    }
+    formatTime();
+  }, 1000);
+}
+
+function formatTime() {
+  const { days, hours, minutes, seconds } = convertMs(
+    selectedDate - new Date()
+  );
+  timerDays.textContent = addLeadingZero(days);
+  timerHours.textContent = addLeadingZero(hours);
+  timerMinutes.textContent = addLeadingZero(minutes);
+  timerSeconds.textContent = addLeadingZero(seconds);
 }
 
 function convertMs(ms) {
@@ -49,4 +72,8 @@ function convertMs(ms) {
   const seconds = Math.floor((((ms % day) % hour) % minute) / second);
 
   return { days, hours, minutes, seconds };
+}
+
+function addLeadingZero(value) {
+  return value.toString().padStart(2, '0');
 }
