@@ -19,9 +19,9 @@ function onClickStart() {
 }
 
 function changeColor() {
-    document.body.style.backgroundColor = getRandomHexColor();
-    timerId = setTimeout(changeColor, 1000);
-  };
+  document.body.style.backgroundColor = getRandomHexColor();
+  timerId = setTimeout(changeColor, 1000);
+}
 
 function onClickStop() {
   clearTimeout(timerId);

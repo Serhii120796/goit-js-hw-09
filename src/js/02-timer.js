@@ -54,7 +54,6 @@ function updateTimer() {
   timerHours.textContent = addLeadingZero(hours);
   timerMinutes.textContent = addLeadingZero(minutes);
   timerSeconds.textContent = addLeadingZero(seconds);
-
 }
 
 function convertMs(ms) {
