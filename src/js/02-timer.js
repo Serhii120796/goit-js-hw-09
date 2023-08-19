@@ -36,17 +36,17 @@ function checkDate(date) {
 function startTimer(evt) {
   evt.target.setAttribute('disabled', '');
 
-  formatTime();
+  updateTimer();
   const timerId = setInterval(() => {
     if (new Date() > selectedDate) {
       clearInterval(timerId);
       return;
     }
-    formatTime();
+    updateTimer();
   }, 1000);
 }
 
-function formatTime() {
+function updateTimer() {
   const { days, hours, minutes, seconds } = convertMs(
     selectedDate - new Date()
   );
@@ -54,6 +54,7 @@ function formatTime() {
   timerHours.textContent = addLeadingZero(hours);
   timerMinutes.textContent = addLeadingZero(minutes);
   timerSeconds.textContent = addLeadingZero(seconds);
+
 }
 
 function convertMs(ms) {
